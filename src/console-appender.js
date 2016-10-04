@@ -17,23 +17,23 @@
 export class ConsoleAppender {
 
   get trace() {
-    return console.trace;
+    return console.trace || console.log;
   }
 
   get debug() {
-    return console.debug;
+    return console.debug || console.log;
   }
 
   get info() {
-    return console.info;
+    return console.info || console.log;
   }
 
   get warn() {
-    return console.warn;
+    return console.warn || console.log;
   }
 
   get error() {
-    return console.error;
+    return console.error || console.log;
   }
 
   get binding() {
