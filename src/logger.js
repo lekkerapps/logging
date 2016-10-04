@@ -39,8 +39,7 @@ export class Logger {
       this._appender = appender;
     }
 
-    this._name = name;
-    this._prefix = '[' + this._name + ']';
+    this.name = name;
     this._level = Levels.WARN;
     this._initLogger();
   }
@@ -55,6 +54,15 @@ export class Logger {
   }
 
   _noop() { }
+
+  set name(name) {
+    if (name === undefined || name === null) {
+      throw new Error('Name required!!!');
+    }
+    this._name = name;
+    this._prefix = this._name.trim().length == 0 ? '' : `[${this._name}]`;
+    this._initLogger();
+  }
 
   get name() {
     return this._name;
