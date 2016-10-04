@@ -5,7 +5,16 @@ module.exports = {
     'options': {
       'presets': ['es2015'],
       'plugins': ['transform-es2015-modules-amd'],
-      'sourceMaps': 'inline'
+      'comments': false
+    }
+  },
+  'commonjs': {
+    'type': 'commonjs',
+    'output': 'commonjs',
+    'options': {
+      'presets': ['es2015'],
+      'plugins': ['transform-es2015-modules-commonjs'],
+      'comments': false
     }
   },
   'es6': {
@@ -14,7 +23,7 @@ module.exports = {
     'options': {
       'presets': ['es2016'],
       'plugins': ['transform-es2015-modules-amd'],
-      'sourceMaps': 'inline'
+      'comments': false
     }
   }
 };
