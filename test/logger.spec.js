@@ -1,4 +1,8 @@
-import {Logger, Levels} from 'es5/logger';
+import {Logger, Levels} from 'logger';
+import chai, { expect } from 'chai';
+import spies from 'chai-spies';
+
+chai.use(spies);
 
 class MockAppender {
   get trace() {
@@ -52,11 +56,11 @@ describe('Logger', () => {
     beforeEach((done) => {
       appender = new MockAppender();
       logger = new Logger('trace', appender);
-      spyOn(appender, '_trace').and.callThrough();
-      spyOn(appender, '_debug').and.callThrough();
-      spyOn(appender, '_info').and.callThrough();
-      spyOn(appender, '_warn').and.callThrough();
-      spyOn(appender, '_error').and.callThrough();
+      chai.spy.on(appender, '_trace');
+      chai.spy.on(appender, '_debug');
+      chai.spy.on(appender, '_info');
+      chai.spy.on(appender, '_warn');
+      chai.spy.on(appender, '_error');
       done();
     });
 
@@ -69,120 +73,120 @@ describe('Logger', () => {
       logger.level = Levels.ALL;
       invokeLogger(logger);
 
-      expect(logger.isTrace).toBe(true);
-      expect(logger.isDebug).toBe(true);
-      expect(logger.isInfo).toBe(true);
-      expect(logger.isWarn).toBe(true);
-      expect(logger.isError).toBe(true);
+      expect(logger.isTrace).to.be.true;
+      expect(logger.isDebug).to.be.true;
+      expect(logger.isInfo).to.be.true;
+      expect(logger.isWarn).to.be.true;
+      expect(logger.isError).to.be.true;
 
-      expect(appender._trace).toHaveBeenCalled();
-      expect(appender._debug).toHaveBeenCalled();
-      expect(appender._info).toHaveBeenCalled();
-      expect(appender._warn).toHaveBeenCalled();
-      expect(appender._error).toHaveBeenCalled();
+      expect(appender._trace).to.have.been.called();
+      expect(appender._debug).to.have.been.called();
+      expect(appender._info).to.have.been.called();
+      expect(appender._warn).to.have.been.called();
+      expect(appender._error).to.have.been.called();
     });
 
     it('Level = NONE: Should NOT invoke trace, debug, info, warn and error', () => {
       logger.level = Levels.NONE;
       invokeLogger(logger);
 
-      expect(logger.isTrace).toBe(false);
-      expect(logger.isDebug).toBe(false);
-      expect(logger.isInfo).toBe(false);
-      expect(logger.isWarn).toBe(false);
-      expect(logger.isError).toBe(false);
+      expect(logger.isTrace).to.be.false;
+      expect(logger.isDebug).to.be.false;
+      expect(logger.isInfo).to.be.false;
+      expect(logger.isWarn).to.be.false;
+      expect(logger.isError).to.be.false;
 
-      expect(appender._trace).not.toHaveBeenCalled();
-      expect(appender._debug).not.toHaveBeenCalled();
-      expect(appender._info).not.toHaveBeenCalled();
-      expect(appender._warn).not.toHaveBeenCalled();
-      expect(appender._error).not.toHaveBeenCalled();
+      expect(appender._trace).to.not.have.been.called();
+      expect(appender._debug).to.not.have.been.called();
+      expect(appender._info).to.not.have.been.called();
+      expect(appender._warn).to.not.have.been.called();
+      expect(appender._error).to.not.have.been.called();
     });
 
     it('Level = TRACE: Should invoke trace, debug, info, warn and error', () => {
       logger.level = Levels.TRACE;
       invokeLogger(logger);
 
-      expect(logger.isTrace).toBe(true);
-      expect(logger.isDebug).toBe(true);
-      expect(logger.isInfo).toBe(true);
-      expect(logger.isWarn).toBe(true);
-      expect(logger.isError).toBe(true);
+      expect(logger.isTrace).to.be.true;
+      expect(logger.isDebug).to.be.true;
+      expect(logger.isInfo).to.be.true;
+      expect(logger.isWarn).to.be.true;
+      expect(logger.isError).to.be.true;
 
-      expect(appender.log).toEqual('Trace msg ...');
-      expect(appender._trace).toHaveBeenCalled();
-      expect(appender._debug).toHaveBeenCalled();
-      expect(appender._info).toHaveBeenCalled();
-      expect(appender._warn).toHaveBeenCalled();
-      expect(appender._error).toHaveBeenCalled();
+      expect(appender.log).to.equal('Trace msg ...');
+      expect(appender._trace).to.have.been.called();
+      expect(appender._debug).to.have.been.called();
+      expect(appender._info).to.have.been.called();
+      expect(appender._warn).to.have.been.called();
+      expect(appender._error).to.have.been.called();
     });
 
     it('Level = DEBUG: Should invoke debug, info, warn and error', () => {
       logger.level = Levels.DEBUG;
       invokeLogger(logger);
 
-      expect(logger.isTrace).toBe(false);
-      expect(logger.isDebug).toBe(true);
-      expect(logger.isInfo).toBe(true);
-      expect(logger.isWarn).toBe(true);
-      expect(logger.isError).toBe(true);
+      expect(logger.isTrace).to.be.false;
+      expect(logger.isDebug).to.be.true;
+      expect(logger.isInfo).to.be.true;
+      expect(logger.isWarn).to.be.true;
+      expect(logger.isError).to.be.true;
 
-      expect(appender._trace).not.toHaveBeenCalled();
-      expect(appender._debug).toHaveBeenCalled();
-      expect(appender._info).toHaveBeenCalled();
-      expect(appender._warn).toHaveBeenCalled();
-      expect(appender._error).toHaveBeenCalled();
+      expect(appender._trace).to.not.have.been.called();
+      expect(appender._debug).to.have.been.called();
+      expect(appender._info).to.have.been.called();
+      expect(appender._warn).to.have.been.called();
+      expect(appender._error).to.have.been.called();
     });
 
     it('Level = INFO: Should invoke info, warn and error', () => {
       logger.level = Levels.INFO;
       invokeLogger(logger);
 
-      expect(logger.isTrace).toBe(false);
-      expect(logger.isDebug).toBe(false);
-      expect(logger.isInfo).toBe(true);
-      expect(logger.isWarn).toBe(true);
-      expect(logger.isError).toBe(true);
+      expect(logger.isTrace).to.be.false;
+      expect(logger.isDebug).to.be.false;
+      expect(logger.isInfo).to.be.true;
+      expect(logger.isWarn).to.be.true;
+      expect(logger.isError).to.be.true;
 
-      expect(appender._trace).not.toHaveBeenCalled();
-      expect(appender._debug).not.toHaveBeenCalled();
-      expect(appender._info).toHaveBeenCalled();
-      expect(appender._warn).toHaveBeenCalled();
-      expect(appender._error).toHaveBeenCalled();
+      expect(appender._trace).to.not.have.been.called();
+      expect(appender._debug).to.not.have.been.called();
+      expect(appender._info).to.have.been.called();
+      expect(appender._warn).to.have.been.called();
+      expect(appender._error).to.have.been.called();
     });
 
     it('Level = WARN: Should invoke warn and error', () => {
       logger.level = Levels.WARN;
       invokeLogger(logger);
 
-      expect(logger.isTrace).toBe(false);
-      expect(logger.isDebug).toBe(false);
-      expect(logger.isInfo).toBe(false);
-      expect(logger.isWarn).toBe(true);
-      expect(logger.isError).toBe(true);
+      expect(logger.isTrace).to.be.false;
+      expect(logger.isDebug).to.be.false;
+      expect(logger.isInfo).to.be.false;
+      expect(logger.isWarn).to.be.true;
+      expect(logger.isError).to.be.true;
 
-      expect(appender._trace).not.toHaveBeenCalled();
-      expect(appender._debug).not.toHaveBeenCalled();
-      expect(appender._info).not.toHaveBeenCalled();
-      expect(appender._warn).toHaveBeenCalled();
-      expect(appender._error).toHaveBeenCalled();
+      expect(appender._trace).to.not.have.been.called();
+      expect(appender._debug).to.not.have.been.called();
+      expect(appender._info).to.not.have.been.called();
+      expect(appender._warn).to.have.been.called();
+      expect(appender._error).to.have.been.called();
     });
 
     it('Level = ERROR: Should invoke only error', () => {
       logger.level = Levels.ERROR;
       invokeLogger(logger);
 
-      expect(logger.isTrace).toBe(false);
-      expect(logger.isDebug).toBe(false);
-      expect(logger.isInfo).toBe(false);
-      expect(logger.isWarn).toBe(false);
-      expect(logger.isError).toBe(true);
+      expect(logger.isTrace).to.be.false;
+      expect(logger.isDebug).to.be.false;
+      expect(logger.isInfo).to.be.false;
+      expect(logger.isWarn).to.be.false;
+      expect(logger.isError).to.be.true;
 
-      expect(appender._trace).not.toHaveBeenCalled();
-      expect(appender._debug).not.toHaveBeenCalled();
-      expect(appender._info).not.toHaveBeenCalled();
-      expect(appender._warn).not.toHaveBeenCalled();
-      expect(appender._error).toHaveBeenCalled();
+      expect(appender._trace).to.not.have.been.called();
+      expect(appender._debug).to.not.have.been.called();
+      expect(appender._info).to.not.have.been.called();
+      expect(appender._warn).to.not.have.been.called();
+      expect(appender._error).to.have.been.called();
     });
   });
 
@@ -230,7 +234,7 @@ describe('Logger', () => {
       let logger = new Logger('logger', appender);
       logger.level = Levels.ALL;
       let assignedThis = logger.debug('Testing binding');
-      expect(assignedThis).toEqual('Debug');
+      expect(assignedThis).to.equal('Debug');
     });
   });
 });

@@ -1,120 +1,136 @@
-define(['exports', './console-appender'], function (exports, _consoleAppender) {
-  'use strict';
+'use strict';
 
-  Object.defineProperty(exports, "__esModule", {
-    value: true
-  });
-  exports.Logger = exports.Levels = undefined;
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Logger = exports.Levels = undefined;
 
-  var _consoleAppender2 = _interopRequireDefault(_consoleAppender);
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-  function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-      default: obj
-    };
-  }
+var _consoleAppender = require('./console-appender');
 
-  const Levels = exports.Levels = {
-    'NONE': 0,
-    'ALL': 1,
-    'TRACE': 2,
-    'DEBUG': 3,
-    'INFO': 4,
-    'WARN': 5,
-    'ERROR': 6
-  };
+var _consoleAppender2 = _interopRequireDefault(_consoleAppender);
 
-  class Logger {
-    constructor(name, appender) {
-      if (name === undefined) {
-        name = 'DEFAULT';
-      }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-      if (!appender) {
-        this._appender = _consoleAppender2.default;
-      } else {
-        this._appender = appender;
-      }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-      this.name = name;
-      this._level = Levels.WARN;
-      this._initLogger();
+var Levels = exports.Levels = {
+  'NONE': 0,
+  'ALL': 1,
+  'TRACE': 2,
+  'DEBUG': 3,
+  'INFO': 4,
+  'WARN': 5,
+  'ERROR': 6
+};
+
+var Logger = exports.Logger = function () {
+  function Logger(name, appender) {
+    _classCallCheck(this, Logger);
+
+    if (name === undefined) {
+      name = 'DEFAULT';
     }
 
-    _initLogger() {
+    if (!appender) {
+      this._appender = _consoleAppender2.default;
+    } else {
+      this._appender = appender;
+    }
+
+    this.name = name;
+    this._level = Levels.WARN;
+    this._initLogger();
+  }
+
+  _createClass(Logger, [{
+    key: '_initLogger',
+    value: function _initLogger() {
       this.trace = this.isTrace ? this._appender.trace.bind(this._appender.binding, this._prefix) : this._noop;
       this.debug = this.isDebug ? this._appender.debug.bind(this._appender.binding, this._prefix) : this._noop;
       this.info = this.isInfo ? this._appender.info.bind(this._appender.binding, this._prefix) : this._noop;
       this.warn = this.isWarn ? this._appender.warn.bind(this._appender.binding, this._prefix) : this._noop;
       this.error = this.isError ? this._appender.error.bind(this._appender.binding, this._prefix) : this._noop;
     }
-
-    _noop() {}
-
-    set name(name) {
+  }, {
+    key: '_noop',
+    value: function _noop() {}
+  }, {
+    key: 'name',
+    set: function set(name) {
       if (name === undefined || name === null) {
         throw new Error('Name required!!!');
       }
       this._name = name;
-      this._prefix = this._name.trim().length == 0 ? '' : `[${ this._name }]`;
+      this._prefix = this._name.trim().length == 0 ? '' : '[' + this._name + ']';
       this._initLogger();
-    }
-
-    get name() {
+    },
+    get: function get() {
       return this._name;
     }
-
-    set appender(appender) {
+  }, {
+    key: 'appender',
+    set: function set(appender) {
       if (!appender) {
         throw new Error('Appender required!!!');
       }
       this._appender = appender;
       this._initLogger();
     }
-
-    set level(level) {
+  }, {
+    key: 'level',
+    set: function set(level) {
       if (level >= Levels.NONE && level <= Levels.ERROR) {
         this._level = level;
         this._initLogger();
       } else {
         throw new Error('Invalid level: ' + level);
       }
-    }
-
-    get level() {
+    },
+    get: function get() {
       return this._level;
     }
-
-    get isNone() {
+  }, {
+    key: 'isNone',
+    get: function get() {
       return this._level === Levels.NONE;
     }
-
-    get isAll() {
+  }, {
+    key: 'isAll',
+    get: function get() {
       return this._level === Levels.ALL;
     }
-
-    get isTrace() {
+  }, {
+    key: 'isTrace',
+    get: function get() {
       return this._level > 0 && this._level <= Levels.TRACE;
     }
-
-    get isDebug() {
+  }, {
+    key: 'isDebug',
+    get: function get() {
       return this._level > 0 && this._level <= Levels.DEBUG;
     }
-
-    get isInfo() {
+  }, {
+    key: 'isInfo',
+    get: function get() {
       return this._level > 0 && this._level <= Levels.INFO;
     }
-
-    get isWarn() {
+  }, {
+    key: 'isWarn',
+    get: function get() {
       return this._level > 0 && this._level <= Levels.WARN;
     }
-
-    get isError() {
+  }, {
+    key: 'isError',
+    get: function get() {
       return this._level > 0 && this._level <= Levels.ERROR;
     }
-  }
+  }]);
 
-  exports.Logger = Logger;
-  let logger = new Logger('');
-  exports.default = logger;
-});
+  return Logger;
+}();
+
+var logger = new Logger('');
+exports.default = logger;
+//# sourceMappingURL=logger.js.map

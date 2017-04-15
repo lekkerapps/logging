@@ -1,4 +1,4 @@
 'use strict';
 
-var _logger = require('./dist/commonjs/logger.js').Logger;
+var _logger = require('./dist/logger.js').Logger;
 exports.Logger = _logger;
