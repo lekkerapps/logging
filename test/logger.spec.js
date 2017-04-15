@@ -237,4 +237,57 @@ describe('Logger', () => {
       expect(assignedThis).to.equal('Debug');
     });
   });
+
+  describe('Logger prefix', () => {
+    it('should append name as prefix to logging', () => {
+      const appender = {
+        trace: () => {},
+        debug: () => {},
+        info: (prefix, log) => {
+          return prefix + ' ' + log;
+        },
+        warn: () => {},
+        error: () => {}
+      };
+
+      const logger = new Logger('TEST', appender);
+      logger.level = 1;
+      expect(logger.info('testing')).to.equal('[TEST] testing');
+    });
+  });
+
+  describe('Child logger', () => {
+    it('should create child logger', () => {
+      const appender = {
+        trace: () => {},
+        debug: () => {},
+        info: (prefix, log) => {
+          return prefix + ' ' + log;
+        },
+        warn: () => {},
+        error: () => {}
+      };
+
+      const logger = new Logger('TEST', appender);
+      logger.level = 1;
+      const childLogger = logger.createChild('DATA');
+      expect(childLogger.info('testing')).to.equal('[TEST/DATA] testing');
+    });
+
+    it('should update child logger level', () => {
+      const appender = {
+        trace: () => {},
+        debug: () => {},
+        info: () => {},
+        warn: () => {},
+        error: () => {}
+      };
+      const logger = new Logger('1', appender);
+      logger.level = 1;
+      const childLogger = logger.createChild('2');
+      expect(childLogger.level).to.equal(1);
+      logger.level = 2;
+      expect(childLogger.level).to.equal(2);
+    });
+  });
 });

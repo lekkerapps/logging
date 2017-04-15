@@ -41,6 +41,7 @@ export class Logger {
 
     this.name = name;
     this._level = Levels.WARN;
+    this.children = [];
     this._initLogger();
   }
 
@@ -64,6 +65,13 @@ export class Logger {
     this._initLogger();
   }
 
+  createChild(name) {
+    const child = new Logger(this.name + '/' + name, this._appender);
+    child.level = this.level;
+    this.children.push(child);
+    return child;
+  }
+
   get name() {
     return this._name;
   }
@@ -85,6 +93,10 @@ export class Logger {
     if (level >= Levels.NONE && level <= Levels.ERROR) {
       this._level = level;
       this._initLogger();
+      // Update children levels
+      for (const child of this.children) {
+        child.level = level;
+      }
     } else {
       throw new Error('Invalid level: ' + level);
     }
@@ -170,5 +182,4 @@ export class Logger {
   }
 }
 
-let logger = new Logger('');
-export default logger;
+export default new Logger('');;

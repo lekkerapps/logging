@@ -41,6 +41,7 @@ var Logger = exports.Logger = function () {
 
     this.name = name;
     this._level = Levels.WARN;
+    this.children = [];
     this._initLogger();
   }
 
@@ -56,6 +57,14 @@ var Logger = exports.Logger = function () {
   }, {
     key: '_noop',
     value: function _noop() {}
+  }, {
+    key: 'createChild',
+    value: function createChild(name) {
+      var child = new Logger(this.name + '/' + name, this._appender);
+      child.level = this.level;
+      this.children.push(child);
+      return child;
+    }
   }, {
     key: 'name',
     set: function set(name) {
@@ -84,6 +93,30 @@ var Logger = exports.Logger = function () {
       if (level >= Levels.NONE && level <= Levels.ERROR) {
         this._level = level;
         this._initLogger();
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = this.children[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var child = _step.value;
+
+            child.level = level;
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+              _iterator.return();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
       } else {
         throw new Error('Invalid level: ' + level);
       }
@@ -131,6 +164,6 @@ var Logger = exports.Logger = function () {
   return Logger;
 }();
 
-var logger = new Logger('');
-exports.default = logger;
+exports.default = new Logger('');
+;
 //# sourceMappingURL=logger.js.map
